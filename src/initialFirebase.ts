@@ -3,13 +3,14 @@ import "firebase/auth";
 import "firebase/database";
 
 const config = {
-  apiKey: "AIzaSyAXpiM9XSsNefcfGZE0Pr1S3TtX2zK2xvw",
-  authDomain: "pwatnotelist.firebaseapp.com",
-  databaseURL: "https://pwatnotelist.firebaseio.com",
-  projectId: "pwatnotelist",
-  storageBucket: "pwatnotelist.appspot.com",
-  messagingSenderId: "891302271230",
-  appId: "1:891302271230:web:d36b8f5644f0fbb4dd6daf",
+  apiKey: "AIzaSyAGcb28fNTMOKjh8Gd-GRCm13og9d6NwSU",
+  authDomain: "ma-soi-sv.firebaseapp.com",
+  databaseURL: "https://ma-soi-sv-default-rtdb.firebaseio.com",
+  projectId: "ma-soi-sv",
+  storageBucket: "ma-soi-sv.appspot.com",
+  messagingSenderId: "971625671699",
+  appId: "1:971625671699:web:15119e5e8879c3611963e6",
+  measurementId: "G-H4SFDG7241",
 };
 
 function initFirebase() {

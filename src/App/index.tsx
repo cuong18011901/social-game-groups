@@ -12,8 +12,8 @@ function App() {
 
   return (
     <HelmetProvider>
-      <Helmet titleTemplate="Edu Demo" defaultTitle="Edu Demo">
-        <meta name="description" content="Edu Demo" />
+      <Helmet titleTemplate="A1k49 Since 1998" defaultTitle="A1K49 since 1998">
+        <meta name="description" content="A1k49 Since 1998" />
       </Helmet>
       <BrowserRouter>
         <AuthRouters />

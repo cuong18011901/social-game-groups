@@ -26,7 +26,6 @@ type State = {
 };
 
 export default function GameScreen(): JSX.Element {
-  const gameName = "INGAME";
   const [state, setState] = useState<State>({
     collapseIndex: ["user"],
     admin: true,
@@ -72,7 +71,10 @@ export default function GameScreen(): JSX.Element {
 
   const addNewTurn = () => {
     let liveUser: UserType[] = [];
-    db.ref("userlist").on("value", (snap) => (liveUser = snap.exportVal()));
+    db.ref("userlist")
+      .orderByChild("die")
+      .equalTo(false)
+      .once("value", (snap) => (liveUser = snap.exportVal()));
     const newdata = { turn: state.game.length + 1, user: liveUser };
     db.ref(`game/turn${newdata.turn}`).set(newdata);
   };
