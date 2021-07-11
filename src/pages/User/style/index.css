@@ -1,0 +1,23 @@
+#custom-table-employees .ant-table-cell a,
+#custom-table-employees .ant-table-cell span {
+  word-break: break-all;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.main-content {
+  height: 100%;
+  background-color: white;
+  padding: 20px
+}
+
+.example {
+  margin: 20px 0;
+  margin-bottom: 20px;
+  padding: 30px 50px;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 4px;
+}
