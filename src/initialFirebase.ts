@@ -20,5 +20,6 @@ function initFirebase() {
 }
 
 initFirebase();
+const auth = firebase.auth();
 
-export { firebase };
+export { firebase, auth };

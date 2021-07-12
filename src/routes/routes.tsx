@@ -1,14 +1,18 @@
 import loadable from "@loadable/component";
 import React from "react";
-import { Route, Switch } from "react-router-dom";
-import { Home } from "../pages/Home";
+import { Redirect, Route, Switch } from "react-router-dom";
+import { auth } from "../initialFirebase";
 import { Game } from "../pages/Game";
+import { Home } from "../pages/Home";
+import { Login } from "../pages/Login";
 import { Setting } from "../pages/Setting";
 import { User } from "../pages/User";
 
 const MainLayout = loadable(() => import("../layouts"));
 
 const AuthRouters = () => {
+  const user = auth.currentUser;
+  if (!user) return <Redirect to="/login" />;
   return (
     <MainLayout>
       <Switch>
@@ -21,4 +25,12 @@ const AuthRouters = () => {
     </MainLayout>
   );
 };
-export { AuthRouters };
+
+const UnAuthRouters = () => {
+  return (
+    <Switch>
+      <Route exact path="/login" component={Login} />
+    </Switch>
+  );
+};
+export { AuthRouters, UnAuthRouters };

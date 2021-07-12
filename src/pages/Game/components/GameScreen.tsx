@@ -4,16 +4,17 @@ import {
   Col,
   Collapse,
   List,
+  Modal,
   Select,
+  Spin,
   Tag,
   Typography,
 } from "antd";
-import { getRedirectStatus } from "next/dist/lib/load-custom-routes";
 import React, { Fragment, useEffect, useState } from "react";
 import "../style/index.css";
 import { firebase } from "./../../../initialFirebase";
 
-const { Text, Link } = Typography;
+const { Text } = Typography;
 const { Panel } = Collapse;
 const db = firebase.database();
 
@@ -37,7 +38,6 @@ export default function GameScreen(): JSX.Element {
   useEffect(() => {
     db.ref().on("value", (snapshot) => {
       snapshot.forEach((childSnapshot) => {
-        console.log(childSnapshot.key);
         switch (childSnapshot.key) {
           case "game":
             setState((s) => ({
@@ -74,9 +74,26 @@ export default function GameScreen(): JSX.Element {
     db.ref("userlist")
       .orderByChild("die")
       .equalTo(false)
-      .once("value", (snap) => (liveUser = snap.exportVal()));
+      .once("value", (snap) =>
+        snap.exportVal() ? (liveUser = snap.exportVal()) : []
+      );
+    if (liveUser.length === 0) return alert("Game đã hết");
     const newdata = { turn: state.game.length + 1, user: liveUser };
     db.ref(`game/turn${newdata.turn}`).set(newdata);
+  };
+
+  const resetGame = () => {
+    Modal.confirm({
+      title: "Chơi lại game mới?",
+      onOk() {
+        db.ref("game")
+          .remove()
+          .then(() => {
+            setState({ ...state, game: [] });
+          });
+      },
+      cancelText: "Hủy",
+    });
   };
 
   const convertToSelectBox = (data?: RoleType[]): Source[] => {
@@ -97,7 +114,15 @@ export default function GameScreen(): JSX.Element {
         return "Chết trong đêm";
     }
   };
-
+  if (!state)
+    return (
+      <div
+        className="main-content"
+        style={{ minHeight: "100%", overflow: "auto", height: 300 }}
+      >
+        <Spin></Spin>
+      </div>
+    );
   return (
     <div
       className="main-content"
@@ -107,6 +132,23 @@ export default function GameScreen(): JSX.Element {
         <Button type={"primary"} onClick={addNewTurn}>
           New Turn
         </Button>
+        {state.game.length == 0 ? (
+          <Button
+            style={{ marginLeft: 10 }}
+            type={"primary"}
+            onClick={addNewTurn}
+          >
+            Random
+          </Button>
+        ) : (
+          <Button
+            style={{ marginLeft: 10 }}
+            type={"primary"}
+            onClick={resetGame}
+          >
+            Reset
+          </Button>
+        )}
       </div>
       <div>
         <Collapse defaultActiveKey={state.collapseIndex}>

@@ -1,0 +1,30 @@
+#custom-table-employees .ant-table-cell a,
+#custom-table-employees .ant-table-cell span {
+  word-break: break-all;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.main-content {
+  height: 100%;
+  background-color: white;
+  padding: 20px
+}
+
+#components-form-demo-normal-login .login-form {
+  max-width: 300px;
+}
+
+#components-form-demo-normal-login .login-form-forgot {
+  float: right;
+}
+
+#components-form-demo-normal-login .ant-col-rtl .login-form-forgot {
+  float: left;
+}
+
+#components-form-demo-normal-login .login-form-button {
+  width: 100%;
+}
