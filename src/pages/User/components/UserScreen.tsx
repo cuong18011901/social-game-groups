@@ -17,10 +17,9 @@ const { Text } = Typography;
 
 const db = firebase.database();
 
-type State = { admin?: boolean; roleList: RoleType[]; userList: UserType[] };
+type State = { roleList: RoleType[]; userList: UserType[] };
 export default function UserScreen(): JSX.Element {
   const [state, setState] = useState<State>({
-    admin: true,
     roleList: [],
     userList: [],
   });
@@ -102,72 +101,70 @@ export default function UserScreen(): JSX.Element {
       className="main-content"
       style={{ minHeight: "100%", overflow: "auto", height: 300 }}
     >
-      {state.admin && (
-        <Form
-          form={form}
-          layout="vertical"
-          name="advanced_search"
-          className="ant-advanced-search-form"
-          onFinish={onFinish}
+      <Form
+        form={form}
+        layout="vertical"
+        name="advanced_search"
+        className="ant-advanced-search-form"
+        onFinish={onFinish}
+      >
+        <Form.Item
+          name={"name"}
+          label={"Name"}
+          rules={[
+            {
+              required: true,
+              message: "Input something!",
+            },
+          ]}
         >
-          <Form.Item
-            name={"name"}
-            label={"Name"}
-            rules={[
-              {
-                required: true,
-                message: "Input something!",
-              },
-            ]}
-          >
-            <Input placeholder="placeholder" />
-          </Form.Item>
-          <Form.Item
-            name={"code"}
-            label={"Code"}
-            rules={[
-              {
-                required: true,
-                message: "Input something!",
-              },
-            ]}
-          >
-            <Input placeholder="placeholder" />
-          </Form.Item>
-          <Form.Item
-            name={"password"}
-            label={"password"}
-            rules={[
-              {
-                required: true,
-                message: "Input something!",
-              },
-            ]}
-          >
-            <Input placeholder="placeholder" />
-          </Form.Item>{" "}
-          <Form.Item
-            name={"role"}
-            label={"role"}
-            rules={[
-              {
-                required: true,
-                message: "Input something!",
-              },
-            ]}
-          >
-            <Select
-              clearIcon={true}
-              options={convertToSelectBox(state.roleList)}
-            />
-          </Form.Item>
-          <Form.Item>
-            <Button type="primary" htmlType="submit">
-              Thêm
-            </Button>
-          </Form.Item>
-        </Form>
-      )}
+          <Input placeholder="placeholder" />
+        </Form.Item>
+        <Form.Item
+          name={"code"}
+          label={"Code"}
+          rules={[
+            {
+              required: true,
+              message: "Input something!",
+            },
+          ]}
+        >
+          <Input placeholder="placeholder" />
+        </Form.Item>
+        <Form.Item
+          name={"password"}
+          label={"password"}
+          rules={[
+            {
+              required: true,
+              message: "Input something!",
+            },
+          ]}
+        >
+          <Input placeholder="placeholder" />
+        </Form.Item>{" "}
+        <Form.Item
+          name={"role"}
+          label={"role"}
+          rules={[
+            {
+              required: true,
+              message: "Input something!",
+            },
+          ]}
+        >
+          <Select
+            clearIcon={true}
+            options={convertToSelectBox(state.roleList)}
+          />
+        </Form.Item>
+        <Form.Item>
+          <Button type="primary" htmlType="submit">
+            Thêm
+          </Button>
+        </Form.Item>
+      </Form>
       <div>
         <List
           itemLayout="horizontal"
@@ -175,31 +172,27 @@ export default function UserScreen(): JSX.Element {
           renderItem={(item: UserType) => (
             <List.Item
               style={{ width: "100%" }}
-              actions={
-                state.admin
-                  ? [
-                      <Fragment>
-                        <Select
-                          loading={!state.roleList}
-                          value={item.role.code}
-                          options={convertToSelectBox(state.roleList)}
-                        />
-                      </Fragment>,
-                      <Button
-                        onClick={() => {
-                          db.ref(`userlist`).child(item.code).remove();
-                          db.ref(`userlist`).once("value", (value) => {
-                            !value.exportVal() &&
-                              setState({ ...state, userList: [] });
-                          });
-                        }}
-                        type={"dashed"}
-                      >
-                        Xóa
-                      </Button>,
-                    ]
-                  : []
-              }
+              actions={[
+                <Fragment>
+                  <Select
+                    loading={!state.roleList}
+                    value={item.role.code}
+                    options={convertToSelectBox(state.roleList)}
+                  />
+                </Fragment>,
+                <Button
+                  onClick={() => {
+                    db.ref(`userlist`).child(item.code).remove();
+                    db.ref(`userlist`).once("value", (value) => {
+                      !value.exportVal() &&
+                        setState({ ...state, userList: [] });
+                    });
+                  }}
+                  type={"dashed"}
+                >
+                  Xóa
+                </Button>,
+              ]}
             >
               <List.Item.Meta
                 avatar={
@@ -207,18 +200,14 @@ export default function UserScreen(): JSX.Element {
                 }
                 title={item.name}
                 description={
-                  state.admin ? (
-                    <Fragment>
-                      <Col>
-                        <Text type="success">{`Nhân vật trong game: ${item.role.name}`}</Text>
-                      </Col>
-                      <Col>
-                        <Text type="success">{`Chú thích: ${item.role.note}`}</Text>
-                      </Col>
-                    </Fragment>
-                  ) : (
-                    ""
-                  )
+                  <Fragment>
+                    <Col>
+                      <Text type="success">{`Nhân vật trong game: ${item.role.name}`}</Text>
+                    </Col>
+                    <Col>
+                      <Text type="success">{`Chú thích: ${item.role.note}`}</Text>
+                    </Col>
+                  </Fragment>
                 }
               />
             </List.Item>

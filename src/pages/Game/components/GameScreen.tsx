@@ -19,8 +19,8 @@ const { Panel } = Collapse;
 const db = firebase.database();
 
 type State = {
-  admin?: boolean;
   game: GameType[];
+  isReset?: boolean;
   collapseIndex?: string[] | number[];
   roleList: RoleType[];
   userList: UserType[];
@@ -28,8 +28,8 @@ type State = {
 
 export default function GameScreen(): JSX.Element {
   const [state, setState] = useState<State>({
+    isReset: false,
     collapseIndex: ["user"],
-    admin: true,
     game: [],
     roleList: [],
     userList: [],
@@ -67,7 +67,7 @@ export default function GameScreen(): JSX.Element {
         }
       });
     });
-  }, []);
+  }, [state.isReset]);
 
   const addNewTurn = () => {
     let liveUser: UserType[] = [];
@@ -91,6 +91,12 @@ export default function GameScreen(): JSX.Element {
           .then(() => {
             setState({ ...state, game: [] });
           });
+        state.userList.forEach((item) => {
+          db.ref("userlist")
+            .child(item.code)
+            .update({ die: false, vote: false });
+        });
+        setState({ ...state, isReset: true });
       },
       cancelText: "Hủy",
     });
@@ -159,17 +165,13 @@ export default function GameScreen(): JSX.Element {
               renderItem={(item) => (
                 <List.Item
                   style={{ width: "100%" }}
-                  actions={
-                    state.admin
-                      ? [
-                          <Select
-                            loading={!state.roleList}
-                            value={item.role.code}
-                            options={convertToSelectBox(state.roleList)}
-                          />,
-                        ]
-                      : []
-                  }
+                  actions={[
+                    <Select
+                      loading={!state.roleList}
+                      value={item.role.code}
+                      options={convertToSelectBox(state.roleList)}
+                    />,
+                  ]}
                 >
                   <List.Item.Meta
                     avatar={
@@ -185,19 +187,17 @@ export default function GameScreen(): JSX.Element {
                       )
                     }
                     description={
-                      state.admin && (
-                        <Fragment>
-                          <Col>
-                            <Text type="secondary">{`Nhân vật trong game: ${item.role.name}`}</Text>
-                          </Col>
-                          <Col>
-                            <Text type="secondary">{`Chú thích: ${item.role.note}`}</Text>
-                          </Col>
-                          <Tag color={item.die ? "error" : "blue"}>
-                            {getUserDie(item.die, item.vote)}
-                          </Tag>
-                        </Fragment>
-                      )
+                      <Fragment>
+                        <Col>
+                          <Text type="secondary">{`Nhân vật trong game: ${item.role.name}`}</Text>
+                        </Col>
+                        <Col>
+                          <Text type="secondary">{`Chú thích: ${item.role.note}`}</Text>
+                        </Col>
+                        <Tag color={item.die ? "error" : "blue"}>
+                          {getUserDie(item.die, item.vote)}
+                        </Tag>
+                      </Fragment>
                     }
                   />
                 </List.Item>
@@ -221,7 +221,7 @@ export default function GameScreen(): JSX.Element {
                         <List.Item
                           style={{ width: "100%" }}
                           actions={
-                            state.admin && !item.die
+                            !item.die
                               ? [
                                   <Button
                                     type="primary"

@@ -18,22 +18,13 @@ interface Props {
   children: ReactNode;
 }
 type State = { database: any };
-const db = firebase.database();
 
 export default function MainLayout(props: Props) {
   const key = window.location.pathname.split("/").pop();
-  const [state, setstate] = useState<State>({ database: null });
   const [collapsed, setcollapsed] = useState(true);
-
   const toggle = () => {
     setcollapsed(!collapsed);
   };
-  // const postListRef = firebase.database().ref("users");
-  // var newPostRef = postListRef.push();
-  // newPostRef.set({
-  // ...
-  // });
-  // console.log(postListRef);
   return (
     <Layout>
       <Sider trigger={null} collapsible collapsed={collapsed}>

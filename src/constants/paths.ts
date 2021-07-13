@@ -1,5 +1,4 @@
 const PATH = {
-  LOGIN: "/login",
   Home: "/home",
 };
 
