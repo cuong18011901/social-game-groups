@@ -69,3 +69,9 @@ declare interface RoleType {
   name: string;
   note: string;
 }
+declare interface VoteType {
+  userName: string;
+  totalVote: string;
+  userVote: UserType[];
+  note: string;
+}

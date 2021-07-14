@@ -6,6 +6,7 @@ import { Home } from "../pages/Home";
 import { Login } from "../pages/Login";
 import { Setting } from "../pages/Setting";
 import { User } from "../pages/User";
+import { UserInGame } from "../pages/UserInGame";
 
 const MainLayout = loadable(() => import("../layouts"));
 
@@ -18,6 +19,7 @@ const AuthRouters = () => {
         <Route exact path="/game" component={Game} />
         <Route exact path="/user" component={User} />
         <Route exact path="/setting" component={Setting} />
+        <Route exact path="/play-game" component={UserInGame} />
       </Switch>
     </MainLayout>
   );
