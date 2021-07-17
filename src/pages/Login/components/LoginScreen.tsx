@@ -1,13 +1,33 @@
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
-import { Button, Checkbox, Form, Input } from "antd";
-import React from "react";
+import { Button, Checkbox, Form, Input, notification } from "antd";
+import React, { useState } from "react";
+import { Redirect } from "react-router-dom";
+import { auth } from "../../../initialFirebase";
 import "../style/index.css";
 
 export default function LoginScreen(): JSX.Element {
+  const [state, setstate] = useState({ isLoading: false });
   const onFinish = (values: any) => {
-    console.log("Received values of form: ", values);
+    setstate({ ...state, isLoading: true });
+    setTimeout(() => {
+      auth
+        .signInWithEmailAndPassword(values.email, values.password)
+        .then((doc) => {
+          localStorage.setItem("uid", doc.user?.uid as string);
+          notification["success"]({
+            message: "Đăng nhập thành công!!",
+          });
+          // window.location.replace("/");
+        })
+        .catch((err) => {
+          setstate({ ...state, isLoading: false });
+          notification["warning"]({
+            message: "Lỗi đăng nhập, vui lòng thử lại!!",
+          });
+        });
+    }, 300);
   };
-
+  if (state.isLoading) return <div className="loader"></div>;
   return (
     <div style={{ padding: 20 }}>
       <Form
@@ -17,12 +37,12 @@ export default function LoginScreen(): JSX.Element {
         onFinish={onFinish}
       >
         <Form.Item
-          name="username"
-          rules={[{ required: true, message: "Please input your Username!" }]}
+          name="email"
+          rules={[{ required: true, message: "Please input your Email!" }]}
         >
           <Input
             prefix={<UserOutlined className="site-form-item-icon" />}
-            placeholder="Username"
+            placeholder="Email"
           />
         </Form.Item>
         <Form.Item

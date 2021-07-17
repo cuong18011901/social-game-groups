@@ -2,7 +2,6 @@ import {
   Avatar,
   Badge,
   Button,
-  Card,
   Col,
   Collapse,
   List,
@@ -46,6 +45,7 @@ export default function GameScreen(): JSX.Element {
         setState({ ...state, voteList: Object.values(snap.exportVal()) });
       });
   }, []);
+
   useEffect(() => {
     db.ref().on("value", (snapshot) => {
       snapshot.forEach((childSnapshot) => {
@@ -110,7 +110,10 @@ export default function GameScreen(): JSX.Element {
     }
   };
 
-  const onVote = () => {};
+  const onVote = () => {
+    console.log("object");
+    return null;
+  };
 
   const renderListVote = () => {
     let listVote: VoteType[] = [];
@@ -131,7 +134,7 @@ export default function GameScreen(): JSX.Element {
         renderItem={(item) => (
           <List.Item
             actions={[
-              <Button>Thêm Phiếu</Button>,
+              <Button onClick={onVote}>Thêm Phiếu</Button>,
               <Select
                 value={"Người bỏ phiếu"}
                 options={convertUserToSelectBox(state.userList)}
@@ -235,11 +238,6 @@ export default function GameScreen(): JSX.Element {
                                       console.log(snap.val())
                                     )
                                 );
-                                // db.ref(`votelist/${item.code}`).update({
-                                //   userName: item.name,
-                                //   userCode: item.code,
-                                //   totalVote: 1,
-                                // });
                               }}
                             >
                               Đưa lên giàn

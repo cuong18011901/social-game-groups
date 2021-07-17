@@ -59,9 +59,14 @@ declare interface UserType {
   role: RoleType;
 }
 declare interface GameType {
-  gameCode: string | number;
-  turn: number;
+  gameCode?: string | number;
+  gameName?: string | number;
+  userId?: string;
+  gamePass?: string;
+  end?: boolean;
+  turn?: number;
   user: UserType[];
+  userList: UserType[];
 }
 
 declare interface RoleType {
